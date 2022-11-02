@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {ChangeEvent, useState, KeyboardEvent } from 'react';
 import {FilterValuesType} from './App';
 
 type TaskType = {
-    id: number
+    id: string
     title: string
     isDone: boolean
 }
@@ -10,16 +10,40 @@ type TaskType = {
 type PropsType = {
     title: string
     tasks: Array<TaskType>
-    removeTask: (taskId: number) => void
+    removeTask: (taskId: string) => void
     changeFilter: (value: FilterValuesType) => void
+    addTask: (title:string) => void
 }
 
 export function Todolist(props: PropsType) {
+    let [title, setTitle] = useState('')
+
+    const addTask =()=>{
+        props.addTask(title)
+        setTitle('')
+    }
+
+    const onChangeHandler =(e:ChangeEvent<HTMLInputElement>)=>{
+        setTitle(e.currentTarget.value)
+    }
+    const onKeyDownHandler =(e:KeyboardEvent<HTMLInputElement>)=>{
+        if(e.key==='Enter'){
+            addTask()
+        }
+    }
+    const onFilterClickHandler =(filer:FilterValuesType)=>{
+        props.changeFilter(filer)
+    }
+
+
     return <div>
         <h3>{props.title}</h3>
         <div>
-            <input/>
-            <button>+</button>
+            <input value={title}
+                   onChange={onChangeHandler}
+                   onKeyDown={onKeyDownHandler}
+            />
+            <button onClick={addTask}>+</button>
         </div>
         <ul>
             {
@@ -31,13 +55,13 @@ export function Todolist(props: PropsType) {
             }
         </ul>
         <div>
-            <button onClick={ () => { props.changeFilter("all") } }>
+            <button onClick={ () =>  onFilterClickHandler("all")  }>
                 All
             </button>
-            <button onClick={ () => { props.changeFilter("active") } }>
+            <button onClick={ () => onFilterClickHandler("active")  }>
                 Active
             </button>
-            <button onClick={ () => { props.changeFilter("completed") } }>
+            <button onClick={ () => onFilterClickHandler("completed")  }>
                 Completed
             </button>
         </div>
