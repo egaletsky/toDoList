@@ -54,6 +54,7 @@ export function Todolist(props: PropsType) {
             />
             <button onClick={addTask}>+</button>
             {error && <div className={'error-message'}>{error}</div>}
+
         </div>
 
         <ul>
