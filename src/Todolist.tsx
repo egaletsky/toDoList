@@ -3,8 +3,9 @@ import {FilterValuesType} from './App';
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
 import {Delete} from '@mui/icons-material'
-import {Checkbox, IconButton} from '@mui/material'
+import {IconButton} from '@mui/material'
 import Button from '@mui/material/Button';
+import {CheckBox} from './components/CheckBox';
 
 export type TaskType = {
     id: string
@@ -24,6 +25,10 @@ type PropsType = {
     removeToDoList: (toDoListID: string) => void
 }
 
+function Checkbox1() {
+    return null;
+}
+
 export function Todolist(props: PropsType) {
     let [title, setTitle] = useState('')
     let [error, setError] = useState<string | null>(null)
@@ -38,6 +43,10 @@ export function Todolist(props: PropsType) {
 
     const removeToDoListHandler = () => {
         props.removeToDoList(props.todolistID)
+    }
+
+    const  changeTaskStatusHandler = (id:string, checkedValue:boolean)=>{
+        props.changeTaskStatus( props.todolistID, id,checkedValue )
     }
 
     return <div>
@@ -57,6 +66,8 @@ export function Todolist(props: PropsType) {
                     props.changeTaskStatus(props.todolistID, t.id, e.currentTarget.checked)
                 }
 
+
+
                 return (
                     <li key={t.id} className={t.isDone ? 'is-done' : ''}>
 
@@ -64,16 +75,7 @@ export function Todolist(props: PropsType) {
                             <Delete/>
                         </IconButton>
 
-                        {/*<input type="checkbox"*/}
-                        {/*       checked={t.isDone}*/}
-                        {/*       onChange={onChangeHandler}*/}
-                        {/*/>*/}
-                        <Checkbox
-                            checked={t.isDone}
-                            color='primary'
-                            onChange={onChangeHandler}
-                            size='medium'
-                        />
+                       <CheckBox callback={(checkedValue) => changeTaskStatusHandler(t.id,checkedValue)} isDone={t.isDone}/>
 
                         <EditableSpan title={t.title}/>
 
